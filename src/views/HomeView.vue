@@ -29,27 +29,30 @@
     <div class="container d-flex flex-wrap justify-content-start">
       <!-- Card 1 -->
       <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div class="card mx-auto card-info" style="width: 18rem">
-          <img class="card-img-top" src="../assets/image/image.png" />
-          <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
+        <router-link :to="{ name: 'listing', params: { id: 1 } }">
+          <!-- product id -->
+          <div class="card mx-auto card-info" style="width: 18rem">
+            <img class="card-img-top" src="../assets/image/image.png" />
+            <div class="card-body">
+              <h5 class="card-title">80 000 ₾</h5>
               <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
+                <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი,
+                ი. ჭავჭავაძის 53
               </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
+              <div class="d-flex justify-content-between mt-3">
+                <p class="card-text">
+                  <font-awesome-icon :icon="['fas', 'bed']" /> 2
+                </p>
+                <p class="card-text">
+                  <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
+                </p>
+                <p class="card-text">
+                  <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
+                </p>
+              </div>
             </div>
           </div>
-        </div>
+        </router-link>
       </div>
 
       <!-- Card 2 -->

@@ -28,6 +28,7 @@ export default {
 <style>
 body {
   overflow-x: hidden;
+  text-decoration: none;
 }
 
 .container {
