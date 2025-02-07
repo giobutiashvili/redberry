@@ -5,10 +5,10 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faAngleDown, faLocationDot,faVectorSquare ,faBed, faSignsPost } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faLocationDot,faVectorSquare ,faBed, faSignsPost, faEnvelope,faPhoneVolume, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const app = createApp(App)
-library.add(faAngleDown,faLocationDot,faVectorSquare,faBed,faSignsPost);
+library.add(faAngleDown,faLocationDot,faVectorSquare,faBed,faSignsPost,faEnvelope, faPhoneVolume, faArrowLeft);
 
 app.use(router)
 app.component('font-awesome-icon', FontAwesomeIcon);
