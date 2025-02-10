@@ -104,7 +104,7 @@
         >
           <img class="card-img-top" src="../assets/image/image1.png" />
           <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
+            <h5 class="card-title" style="font-size: 24px">80 000 ₾</h5>
             <p class="card-text">
               <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
               ჭავჭავაძის 53
@@ -134,7 +134,7 @@
         >
           <img class="card-img-top" src="../assets/image/image1.png" />
           <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
+            <h5 class="card-title" style="font-size: 24px">80 000 ₾</h5>
             <p class="card-text">
               <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
               ჭავჭავაძის 53
@@ -164,7 +164,7 @@
         >
           <img class="card-img-top" src="../assets/image/image5.png" />
           <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
+            <h5 class="card-title" style="font-size: 24px">80 000 ₾</h5>
             <p class="card-text">
               <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
               ჭავჭავაძის 53

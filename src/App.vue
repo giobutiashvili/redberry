@@ -12,11 +12,19 @@ export default {
 </script>
 
 <template>
-  <header>
+  <header
+    class=""
+    style="border-bottom: 1px solid #dbdbdb; margin-bottom: 2.5rem"
+  >
     <div class="wrapper">
       <nav class="container d-flex justify-content-between align-items-center">
         <RouterLink to="/">
-          <img style="width: 150px; height: 25px" :src="logUrl" alt="" />
+          <img
+            class="m-4"
+            style="width: 150px; height: 25px"
+            :src="logUrl"
+            alt=""
+          />
         </RouterLink>
       </nav>
     </div>
