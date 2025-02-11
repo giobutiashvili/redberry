@@ -84,7 +84,7 @@
         <div class="row g-3">
           <div class="col-md-6">
             <label class="form-label input-option" for="location">ფასი</label>
-            <input class="form-control rounded p-2" type="text" />
+            <input class="form-control rounded p-2" type="number" />
             <p class="input-option">
               <font-awesome-icon :icon="['fas', 'check']" /> მხოლოდ რიცხვები
             </p>
@@ -93,7 +93,7 @@
             <label class="form-label input-option" for="postal-code"
               >ფართობი</label
             >
-            <input class="form-control rounded p-2" type="text" />
+            <input class="form-control rounded p-2" type="number" />
             <p class="input-option">
               <font-awesome-icon :icon="['fas', 'check']" /> მხოლოდ რიცხვები
             </p>
@@ -102,7 +102,7 @@
             <label class="form-label input-option" for="postal-code"
               >საძინებლების რაოდენობა*</label
             >
-            <input class="form-control rounded p-2" type="text" />
+            <input class="form-control rounded p-2" type="number" />
             <p class="input-option">
               <font-awesome-icon :icon="['fas', 'check']" /> მხოლოდ რიცხვები
             </p>
@@ -122,20 +122,68 @@
             </p>
           </div>
           <div class="col-md-12 mt-4">
-            <label class="form-label input-option" for="photo"
-              >ფოტოს ატვირთვა</label
-            >
+            <div class="form-label input-option">
+              <h5 class="mb-3 types">ატვირთე ფოტო</h5>
+            </div>
+            <label class="form-label upload-label col-md-12" for="fileInput">
+              <div
+                class="upload-container rounded p-5"
+                style="border: 1px dashed #2d3648"
+              >
+                <font-awesome-icon
+                  :icon="['fas', 'circle-plus']"
+                  style="height: 40px"
+                  v-if="!previewImage"
+                />
+                <img
+                  v-if="previewImage"
+                  :src="previewImage"
+                  alt="Preview"
+                  class="preview-img"
+                />
+              </div>
+            </label>
             <div class="input-group">
-              <font-awesome-icon
+              <input
                 type="file"
-                id="photo"
-                :icon="['fas', 'circle-plus']"
-                class="input-group-text"
+                id="fileInput"
+                class="hidden-input"
+                @change="handleFileUpload"
               />
-              <input class="form-control rounded p-2" type="file" id="photo" />
+            </div>
+          </div>
+          <div class="col-md-6 mt-4">
+            <label class="form-label input-option" for="photo">
+              <h5 class="mb-3 types">აგენტი</h5>
+            </label>
+            <p class="input_option" style="margin-bottom: 0">აირჩიე</p>
+            <select
+              class="form-control rounded p-2"
+              id="region"
+              @change="handleChange"
+            >
+              <option value="" disabled selected>აირჩიე</option>
+              <option value="add_agent">დაამატე აგენტი</option>
+              <option v-for="reg in region" :key="reg.id" value="reg.id">
+                {{ reg.name }}
+              </option>
+            </select>
+            <div v-if="isModalVisible" class="modal">
+              <div class="modal-content">
+                <h4>დაამატე აგენტი</h4>
+                <button @click="closeModal">დახურვა</button>
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="row g-3 mt-5 justify-content-end">
+        <button @click="goToAddListing" class="btn mr-3 removelisting">
+          გაუქმება
+        </button>
+        <button @click="removeListing" class="btn addlisting">
+          დაამატე ლისტინგი
+        </button>
       </div>
     </div>
   </div>
@@ -146,10 +194,13 @@ import httprequests from "@/httprequest/HttpRequest";
 export default {
   data() {
     return {
+      isModalVisible: false,
+      selectedDeal: "sell",
       selectedRegion: "",
       selectedCity: "",
       region: [],
       cities: [],
+      previewImage: null,
     };
   },
 
@@ -159,6 +210,25 @@ export default {
   },
 
   methods: {
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.previewImage = URL.createObjectURL(file);
+      }
+    },
+    handleChange(event) {
+      if (event.target.value === "add_agent") {
+        this.addagent();
+      }
+    },
+    addagent() {
+      this.isModalVisible = true;
+      console.log("add agent");
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+
     async getRegionlist() {
       try {
         const response = await httprequests.getRegionlist();
@@ -179,23 +249,35 @@ export default {
 };
 </script>
 <style scoped>
-.input-group-text {
-  background-color: #f8f9fa;
-  border: 1px solid #ced4da;
-}
-.types {
-  font-family: Helvetica Neue;
-  margin-right: 5px;
-  font-size: 16px;
-  line-height: 19.54px;
-  font-weight: 500;
-  color: #1a1a1f;
-}
-.input-option {
-  font-family: Helvetica Neue;
+.addlisting,
+.removelisting {
+  border-radius: 10px;
   font-size: 14px;
-  line-height: 16.8px;
-  font-weight: 400;
-  color: #021526;
+  font-weight: 500;
+  line-height: 19.2px;
+}
+
+.addlisting {
+  background-color: rgba(249, 59, 29, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.removelisting {
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(249, 59, 29, 1);
+  color: rgba(249, 59, 29, 1);
+}
+.upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hidden-input {
+  display: none;
+}
+
+.upload-label {
+  cursor: pointer;
 }
 </style>

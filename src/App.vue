@@ -53,4 +53,56 @@ body {
 .col-12 {
   flex: 1 1 100%;
 }
+.addlisting,
+.removelisting {
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.2px;
+}
+
+.addlisting {
+  background-color: rgba(249, 59, 29, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.removelisting {
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(249, 59, 29, 1);
+  color: rgba(249, 59, 29, 1);
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+.types {
+  font-family: Helvetica Neue;
+  margin-right: 5px;
+  font-size: 16px;
+  line-height: 19.54px;
+  font-weight: 500;
+  color: #1a1a1f;
+}
+.input-option {
+  font-family: Helvetica Neue;
+  font-size: 14px;
+  line-height: 16.8px;
+  font-weight: 400;
+  color: #021526;
+}
 </style>

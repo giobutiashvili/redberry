@@ -20,7 +20,10 @@
         <button @click="goToAddListing" class="mr-3 addlisting">
           + ლისტინგის დამატება
         </button>
-        <button class="addagents">+ აგენტის დამატება</button>
+        <button class="addagents" @click="isModalVisible = true">
+          + აგენტის დამატება
+        </button>
+        <AgentModal v-if="isModalVisible" @close="isModalVisible = false" />
       </div>
     </div>
   </main>
@@ -180,7 +183,17 @@
 </template>
 
 <script>
+import AgentModal from "./AgentModal.vue";
+
 export default {
+  components: {
+    AgentModal,
+  },
+  data() {
+    return {
+      isModalVisible: false,
+    };
+  },
   methods: {
     goToAddListing() {
       this.$router.push("/addlisting");
