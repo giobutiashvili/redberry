@@ -1,13 +1,16 @@
-import axios from "axios";
+import apiClient from "@/views/apiClient";
 
 class HttpRequests {
     getCitylist() {
-        return axios.get("https://api.real-estate-manager.redberryinternship.ge/api/cities");
+        return apiClient.get("/cities");
     }
 
     getRegionlist() {
-        return axios.get("https://api.real-estate-manager.redberryinternship.ge/api/regions");
+        return apiClient.get("/regions");
+    }
+    getAgentslist() {
+        return apiClient.get("/agents");
     }
 }
 
-export default new HttpRequests(); // ობიექტად ექსპორტი
+export default new HttpRequests();

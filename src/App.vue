@@ -1,12 +1,28 @@
 <script>
 import { RouterLink, RouterView } from "vue-router";
+import apiClient from "./views/apiClient";
 
 export default {
   data() {
     return {
       logUrl:
         "https://s3-alpha-sig.figma.com/img/f69b/80be/31a111bebc15f4f9df757da172ce198d?Expires=1739750400&Key-Pair-Id=APKAQ4GOSFWCW27IBOMQ&Signature=ove5DjPy4cUqybV2AaiJkNDFeZDlGWI6cTf9ipBf4dCyEtGVjZfAykqIQzhPw6wiEVjVcFGL1-zET1JrzuvkgKS8s9HMEq7P4GNELprswEpE0CCo-uSyDmPNHbEwAwO8cpfUEmQ3xG3dnNfk8PJ3a9HjEvFfiRXqXj7GZ~CVnaVJfbdajKkydO4SzPw8padsDxXWcoQm8bsNJ2kYTwBnhxHqLyvkCsM7Ve0PVyVXNGn-RMKNTjjcPJKF3ETsuGMgooeTZJT5lgtxXCkfO5cOZJ-AHlXGFU6-YHf2BdqNurmSYYxXaG3xlolQdD0W4tmVVe~GpbB8diS4uFtFKYzI-A__",
+      agents: [],
     };
+  },
+  methods: {
+    async fetchData() {
+      try {
+        const response = await apiClient.get("/agents");
+        console.log(response.data);
+        this.agents = response.data;
+      } catch (error) {
+        console.error("Error fetching agents:", error);
+      }
+    },
+  },
+  mounted() {
+    this.fetchData();
   },
 };
 </script>
