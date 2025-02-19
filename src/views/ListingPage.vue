@@ -86,10 +86,40 @@
               <div class="mt-3">
                 <button
                   class="btn align-items-center text-muted listingbtn"
-                  @click="deletListing(realestate.id)"
+                  @click="showModal"
                 >
                   ლისტინგის წაშლა
                 </button>
+
+                <div
+                  v-if="isVisible"
+                  class="modal-overlay"
+                  @click.self="cancelDelete"
+                >
+                  <div class="modal-content col-md-6 text-left">
+                    <div>
+                      <div class="modal-header">
+                        <h2>გსურთ წაშალოთ ლისტინგი?</h2>
+                      </div>
+
+                      <div
+                        class="modal-body d-flex justify-content-center gap-3"
+                      >
+                        <div class="row g-3 mt-5 justify-content-end">
+                          <button
+                            @click="confirmDelete"
+                            class="btn mr-3 removelisting"
+                          >
+                            დადასტურება
+                          </button>
+                          <button @click="cancelDelete" class="btn addlisting">
+                            გაუქმება
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -99,7 +129,7 @@
     <div>
       <h2>ბინები მსგავს ლოკაციაზე</h2>
     </div>
-    <div class="fluid d-flex mt-4">
+    <!-- <div class="fluid d-flex mt-4">
       <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
         <div
           class="card mx-auto card-info"
@@ -190,7 +220,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -203,6 +233,7 @@ export default {
   data() {
     return {
       realestate: { agent: {} },
+      isVisible: false,
     };
   },
   mounted() {
@@ -226,11 +257,47 @@ export default {
         console.error("Error deleting real estate:", error);
       }
     },
+    showModal() {
+      this.isVisible = true;
+    },
+    cancelDelete() {
+      this.isVisible = false;
+    },
+    confirmDelete() {
+      this.isVisible = false;
+      this.deletListing(this.realestate.id);
+    },
+    async deletListing(id) {
+      try {
+        await httprequest.deleterealestate(id);
+        this.$router.push({ name: "home" });
+      } catch (error) {
+        console.error("Error deleting real estate:", error);
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
+.addlisting,
+.removelisting {
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19.2px;
+}
+
+.addlisting {
+  background-color: rgba(249, 59, 29, 1);
+  color: rgba(255, 255, 255, 1);
+}
+
+.removelisting {
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid rgba(249, 59, 29, 1);
+  color: rgba(249, 59, 29, 1);
+}
 .listingbtn {
   background-color: #f8f9fa;
   border: 1px solid #ced4da;
@@ -241,17 +308,20 @@ export default {
   font-weight: 500;
   line-height: 14.4px;
 }
+
 .card-title {
   font-weight: 700;
   font-size: 48px;
-  line-height: 57, 6px;
+  line-height: 57.6px; /* სწორად ფორმატირებული */
 }
+
 .description {
   color: #808a93;
   font-size: 16px;
   line-height: 26px;
   font-weight: 400;
 }
+
 .card-text {
   color: #808a93;
 }
