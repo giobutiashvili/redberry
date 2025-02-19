@@ -30,152 +30,48 @@
 
   <section class="row mt-3">
     <div class="container d-flex flex-wrap justify-content-start">
-      <!-- Card 1 -->
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <router-link :to="{ name: 'listing', params: { id: 1 } }"
-          ><!--productid -->
+      <!-- Card  -->
+
+      <div
+        v-if="realestates.length > 0"
+        class="col-12 col-md-4 d-flex justify-content-center mb-3"
+        v-for="(realestate, index) in realestates"
+        :key="index"
+      >
+        <router-link :to="{ name: 'listing', params: { id: realestate.id } }">
           <div class="card mx-auto card-info" style="width: 18rem">
-            <img class="card-img-top" src="../assets/image/image.png" />
+            <img
+              class="card-img-top"
+              :src="realestate.image"
+              style="width: 286px; height: 230px"
+            />
             <div class="card-body">
-              <h5 class="card-title">80 000 ₾</h5>
+              <h5 class="card-title">{{ realestate.price }}</h5>
               <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი,
-                ი. ჭავჭავაძის 53
+                <font-awesome-icon :icon="['fas', 'location-dot']" />
+                {{ realestate.address }}
               </p>
               <div class="d-flex justify-content-between mt-3">
                 <p class="card-text">
-                  <font-awesome-icon :icon="['fas', 'bed']" /> 2
+                  <font-awesome-icon :icon="['fas', 'bed']" />
+                  {{ realestate.bedrooms }}
                 </p>
                 <p class="card-text">
-                  <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
+                  <font-awesome-icon :icon="['fas', 'vector-square']" />
+                  {{ realestate.area }}
                 </p>
                 <p class="card-text">
-                  <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
+                  <font-awesome-icon :icon="['fas', 'signs-post']" />
+                  {{ realestate.zip_code }}
                 </p>
               </div>
             </div>
           </div>
         </router-link>
       </div>
-
-      <!-- Card 2 -->
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div class="card mx-auto card-info" style="width: 18rem">
-          <img class="card-img-top" src="../assets/image/image1.png" />
-          <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div class="card mx-auto card-info" style="width: 18rem">
-          <img class="card-img-top" src="../assets/image/image2.png" />
-          <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4 -->
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div class="card mx-auto card-info" style="width: 18rem">
-          <img class="card-img-top" src="../assets/image/image3.png" />
-          <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div class="card mx-auto card-info" style="width: 18rem">
-          <img class="card-img-top" src="../assets/image/image4.png" />
-          <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div class="card mx-auto card-info" style="width: 18rem">
-          <img class="card-img-top" src="../assets/image/image5.png" />
-          <div class="card-body">
-            <h5 class="card-title">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
-            </div>
-          </div>
+      <div v-else>
+        <div class="d-flex justify-content-center">
+          <h1>განცხადებები არ მოიძებნა</h1>
         </div>
       </div>
     </div>
@@ -184,6 +80,7 @@
 
 <script>
 import AgentModal from "./AgentModal.vue";
+import httprequests from "@/httprequest/HttpRequest";
 
 export default {
   components: {
@@ -191,10 +88,23 @@ export default {
   },
   data() {
     return {
+      realestates: [],
       isModalVisible: false,
     };
   },
+  mounted() {
+    this.getRealEstates();
+  },
   methods: {
+    async getRealEstates() {
+      try {
+        const response = await httprequests.getRealEstates();
+        this.realestates = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     goToAddListing() {
       this.$router.push("/addlisting");
     },

@@ -194,14 +194,14 @@
                 <option
                   v-for="agent in agents"
                   :key="`agent-${agent.id}`"
-                  :value="JSON.stringify({ type: 'agent', id: agent.id })"
+                  :value="{ type: 'agent', id: agent.id }"
                 >
                   {{ agent.name }} {{ agent.surname }}
                 </option>
                 <option
                   v-for="reg in region"
                   :key="`region-${reg.id}`"
-                  :value="JSON.stringify({ type: 'region', id: reg.id })"
+                  :value="{ type: 'region', id: reg.id }"
                 >
                   {{ reg.name }}
                 </option>
@@ -217,9 +217,7 @@
           <button @click="clearForm" class="btn mr-3 removelisting">
             გაუქმება
           </button>
-          <button @click="submitForm" class="btn addlisting">
-            დაამატე ლისტინგი
-          </button>
+          <button type="submit" class="btn addlisting">დაამატე ლისტინგი</button>
         </div>
       </form>
     </div>
@@ -241,7 +239,8 @@ export default {
       agents: [],
       region: [],
       cities: [],
-
+      selectedRegion: null,
+      selectedAgent: null,
       previewImage: null,
 
       formData: {
@@ -253,8 +252,8 @@ export default {
         bedrooms: "",
         description: "",
         selectedCity: "",
-        selectedRegion: "",
-        selectedAgent: "",
+        selectedRegion: null,
+        selectedAgent: null,
         avatar: null,
       },
     };
@@ -272,7 +271,7 @@ export default {
   },
 
   methods: {
-    handleChange() {
+    handleChange(event) {
       const selectedValue = event.target.value;
 
       if (selectedValue === "add_agent") {
@@ -280,15 +279,18 @@ export default {
         return;
       }
 
-      try {
-        const parsedValue = JSON.parse(selectedValue);
-        if (parsedValue.type === "agent") {
-          this.formData.selectedAgent = parsedValue.id; // მხოლოდ ID ვინახავთ
-        } else if (parsedValue.type === "region") {
-          this.formData.selectedRegion = parsedValue.id; // რეგიონი ცალკე ვინახავთ
+      // თუ 'selectedValue' არის ციფრი, ის ან აგენტის ID-ა, ან რეგიონის
+      const numericValue = Number(selectedValue);
+      if (!isNaN(numericValue)) {
+        // ვამოწმებთ, რომელი ტიპის მონაცემია
+        const isAgent = this.agents.some((agent) => agent.id === numericValue);
+        if (isAgent) {
+          this.formData.selectedAgent = numericValue;
+          console.log("👨‍💼 Selected Agent ID:", this.formData.selectedAgent);
+        } else {
+          this.formData.selectedRegion = numericValue;
+          console.log("🏠 Selected Region ID:", this.formData.selectedRegion);
         }
-      } catch (error) {
-        console.error("Invalid JSON data in select:", error);
       }
     },
 
@@ -296,7 +298,7 @@ export default {
       const file = event.target.files[0];
       if (file) {
         this.formData.avatar = file;
-        console.log("📤 File:", file);
+
         this.previewImage = URL.createObjectURL(file);
       }
     },
@@ -310,7 +312,13 @@ export default {
         formData.append("area", Number(this.formData.area));
         formData.append("city_id", Number(this.formData.selectedCity));
         formData.append("address", String(this.formData.address));
-        formData.append("agent_id", Number(this.formData.selectedAgent));
+        formData.append(
+          "agent_id",
+          this.formData.selectedAgent?.id
+            ? Number(this.formData.selectedAgent.id)
+            : ""
+        );
+        console.log("👨‍💼 Selected Agent:", this.formData.selectedAgent);
         formData.append("bedrooms", Number(this.formData.bedrooms));
         formData.append("is_rental", Number(this.selectedDealFormatted));
         formData.append("region_id", Number(this.formData.selectedRegion));
@@ -365,7 +373,6 @@ export default {
       try {
         const response = await httprequests.getAgentslist();
         this.agents = response.data;
-        console.log("👨‍💼 Agents:", this.agents);
       } catch (error) {
         console.error("Error fetching getAgentslist:", error);
       }
@@ -412,5 +419,9 @@ export default {
 
 .upload-label {
   cursor: pointer;
+}
+.preview-img {
+  width: 250px;
+  border-radius: 10px;
 }
 </style>
