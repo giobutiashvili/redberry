@@ -11,6 +11,7 @@ class HttpRequests {
     getAgentslist() {
         return apiClient.get("/agents");
     }
+    
 }
 
 export default new HttpRequests();

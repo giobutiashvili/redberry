@@ -53,7 +53,7 @@
             <div class="form-group col-md-6">
               <label for="phone">ტელეფონი</label>
               <input
-                type="number"
+                type="tel"
                 class="form-control"
                 id="phone"
                 v-model="formData.phone"
@@ -68,9 +68,10 @@
             <div class="form-label input-option">
               <h5 class="mb-3 types">ატვირთე ფოტო</h5>
             </div>
+
             <label class="form-label upload-label col-md-12" for="fileInput">
               <div
-                class="upload-container rounded p-4"
+                class="upload-container rounded p-5"
                 style="border: 1px dashed #2d3648"
               >
                 <font-awesome-icon
@@ -86,29 +87,29 @@
                 />
               </div>
             </label>
-            <div class="input-group">
-              <input
-                type="file"
-                id="fileInput"
-                class="hidden-input"
-                @change="handleFileUpload"
-              />
-            </div>
+
+            <input
+              required
+              type="file"
+              id="fileInput"
+              class="hidden-input"
+              @change="handleFileUpload"
+            />
+          </div>
+
+          <div class="row g-3 mt-5 justify-content-end">
+            <button
+              type="button"
+              @click="clearForm"
+              class="btn mr-3 removelisting"
+            >
+              გაუქმება
+            </button>
+            <button type="button" @click="submitForm" class="btn addlisting">
+              დაამატე ფოტო
+            </button>
           </div>
         </form>
-
-        <div class="row g-3 mt-5 justify-content-end">
-          <button
-            type="button"
-            @click="clearForm"
-            class="btn mr-3 removelisting"
-          >
-            გაუქმება
-          </button>
-          <button @click="submitForm" class="btn addlisting">
-            დაამატე აგენტი
-          </button>
-        </div>
       </div>
     </div>
   </div>
@@ -131,12 +132,11 @@ export default {
     };
   },
   methods: {
-    handleFileUpload(e) {
-      const file = e.target.files[0];
-      if (file) {
-        this.formData.avatar = file;
-        this.previewImage = URL.createObjectURL(file);
-      }
+    handleFileUpload(event) {
+      const file = event.target.files[0];
+
+      this.formData.avatar = file;
+      this.previewImage = URL.createObjectURL(file); // პრევიუ სურათის ჩვენება
     },
     async submitForm() {
       try {
@@ -145,16 +145,11 @@ export default {
         formData.append("surname", this.formData.surname);
         formData.append("email", this.formData.email);
         formData.append("phone", this.formData.phone);
+
         if (this.formData.avatar) {
-          formData.append("avatar", this.formData.avatar);
+          formData.append("avatar", this.formData.avatar); // სწორად ვამატებთ ფაილს
         }
-        console.log("📤 Sending Form Data:", [...formData.entries()]);
-        const response = await apiClient.post("/agents", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        console.log(response.data);
+        const response = await apiClient.post("/agents", formData);
         this.clearForm();
       } catch (error) {
         if (error.response) {
@@ -163,8 +158,6 @@ export default {
           console.error("Unexpected Error:", error);
         }
       }
-
-      this.clearForm();
     },
     clearForm() {
       this.formData = {

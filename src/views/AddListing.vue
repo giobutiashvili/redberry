@@ -33,13 +33,13 @@
           <h5 class="mb-3 types">მდებარეობა</h5>
           <div class="row g-3">
             <div class="col-md-6">
-              <label class="form-label input-option" for="location"
+              <label class="form-label input-option" for="address"
                 >მისამართი*</label
               >
               <input
                 class="form-control rounded p-2"
                 type="text"
-                v-model="formData.location"
+                v-model="formData.address"
                 required
               />
               <p class="input-option">
@@ -48,13 +48,13 @@
               </p>
             </div>
             <div class="col-md-6">
-              <label class="form-label input-option" for="postalCode"
+              <label class="form-label input-option" for="zip_code"
                 >საფოსტო ინდექსი*</label
               >
               <input
                 class="form-control rounded p-2"
                 type="number"
-                v-model="formData.postalCode"
+                v-model="formData.zip_code"
                 required
               />
               <p class="input-option">
@@ -108,26 +108,24 @@
               </p>
             </div>
             <div class="col-md-6">
-              <label class="form-label input-option" for="postalCode"
-                >ფართობი</label
-              >
+              <label class="form-label input-option" for="area">ფართობი</label>
               <input
                 class="form-control rounded p-2"
                 type="number"
-                v-modal="formData.postalCode"
+                v-model="formData.area"
               />
               <p class="input-option">
                 <font-awesome-icon :icon="['fas', 'check']" /> მხოლოდ რიცხვები
               </p>
             </div>
             <div class="col-md-6">
-              <label class="form-label input-option" for="roomNumber"
+              <label class="form-label input-option" for="bedrooms"
                 >საძინებლების რაოდენობა*</label
               >
               <input
                 class="form-control rounded p-2"
                 type="number"
-                v-model="formData.roomNumber"
+                v-model="formData.bedrooms"
               />
               <p class="input-option">
                 <font-awesome-icon :icon="['fas', 'check']" /> მხოლოდ რიცხვები
@@ -187,37 +185,39 @@
               <p class="input_option" style="margin-bottom: 0">აირჩიე</p>
               <select
                 class="form-control rounded p-2"
-                id="region"
+                id="agent"
                 @change="handleChange"
-                v-model="selecteadAgent"
+                v-model="formData.selectedAgent"
               >
                 <option value="" disabled selected>აირჩიე</option>
                 <option value="add_agent">დაამატე აგენტი</option>
-                <option v-for="reg in region" :key="reg.id" value="reg.id">
-                  {{ reg.name }}
-                </option>
                 <option
-                  :value="'agent-' + agent.id"
                   v-for="agent in agents"
-                  :key="'agent-' + agent.id"
+                  :key="`agent-${agent.id}`"
+                  :value="JSON.stringify({ type: 'agent', id: agent.id })"
                 >
                   {{ agent.name }} {{ agent.surname }}
                 </option>
+                <option
+                  v-for="reg in region"
+                  :key="`region-${reg.id}`"
+                  :value="JSON.stringify({ type: 'region', id: reg.id })"
+                >
+                  {{ reg.name }}
+                </option>
               </select>
-              <div v-if="isModalVisible" class="modal">
-                <div class="modal-content">
-                  <h4>დაამატე აგენტი</h4>
-                  <button @click="submitForm">დახურვა</button>
-                </div>
-              </div>
+              <AgentModal
+                v-if="isModalVisible"
+                @close="isModalVisible = false"
+              />
             </div>
           </div>
         </div>
         <div class="row g-3 mt-5 justify-content-end">
-          <button @click="goToAddListing" class="btn mr-3 removelisting">
+          <button @click="clearForm" class="btn mr-3 removelisting">
             გაუქმება
           </button>
-          <button @click="removeListing" class="btn addlisting">
+          <button @click="submitForm" class="btn addlisting">
             დაამატე ლისტინგი
           </button>
         </div>
@@ -228,88 +228,146 @@
 
 <script>
 import httprequests from "@/httprequest/HttpRequest";
+import AgentModal from "@/views/AgentModal.vue";
+import apiClient from "./apiClient";
+
 export default {
+  components: {
+    AgentModal,
+  },
   data() {
     return {
       isModalVisible: false,
-      selectedDeal: "sell",
       agents: [],
       region: [],
       cities: [],
+
       previewImage: null,
+
       formData: {
         selectedDeal: "sell",
-        location: "",
-        postalCode: "",
+        address: "",
+        area: "",
+        zip_code: "",
         price: "",
-        roomNumber: "",
+        bedrooms: "",
         description: "",
         selectedCity: "",
         selectedRegion: "",
-        previewImage: null,
         selectedAgent: "",
+        avatar: null,
       },
     };
   },
-  watch: {
-    selectedDeal(newValue) {
-      this.formData.selectedDeal = newValue;
-    },
-    selectedCity(newValue) {
-      this.formData.selectedCity = newValue;
-    },
-    selectedRegion(newValue) {
-      this.formData.selectedRegion = newValue;
-    },
-    selectedAgent(newValue) {
-      this.formData.selectedAgent = newValue;
-    },
-  },
+
   mounted() {
     this.getRegionlist();
     this.getCitylist();
     this.getAgentslist();
   },
+  computed: {
+    selectedDealFormatted() {
+      return this.selectedDeal === "sell" ? 1 : 0;
+    },
+  },
 
   methods: {
+    handleChange() {
+      const selectedValue = event.target.value;
+
+      if (selectedValue === "add_agent") {
+        this.isModalVisible = true; // მოდალის გახსნა
+        return;
+      }
+
+      try {
+        const parsedValue = JSON.parse(selectedValue);
+        if (parsedValue.type === "agent") {
+          this.formData.selectedAgent = parsedValue.id; // მხოლოდ ID ვინახავთ
+        } else if (parsedValue.type === "region") {
+          this.formData.selectedRegion = parsedValue.id; // რეგიონი ცალკე ვინახავთ
+        }
+      } catch (error) {
+        console.error("Invalid JSON data in select:", error);
+      }
+    },
+
     handleFileUpload(event) {
       const file = event.target.files[0];
       if (file) {
+        this.formData.avatar = file;
+        console.log("📤 File:", file);
         this.previewImage = URL.createObjectURL(file);
-        this.formData.previewImage = file;
       }
     },
-    handleChange(event) {
-      if (event.target.value === "add_agent") {
-        this.addagent();
-      }
-    },
+
     async submitForm() {
-      console.log("submit form");
+      try {
+        const formData = new FormData();
+        formData.append("price", Number(this.formData.price));
+        formData.append("zip_code", String(this.formData.zip_code));
+        formData.append("description", String(this.formData.description));
+        formData.append("area", Number(this.formData.area));
+        formData.append("city_id", Number(this.formData.selectedCity));
+        formData.append("address", String(this.formData.address));
+        formData.append("agent_id", Number(this.formData.selectedAgent));
+        formData.append("bedrooms", Number(this.formData.bedrooms));
+        formData.append("is_rental", Number(this.selectedDealFormatted));
+        formData.append("region_id", Number(this.formData.selectedRegion));
+
+        if (this.formData.avatar) {
+          formData.append("image", this.formData.avatar);
+        }
+        console.log("📤 Sending Form Data:", [...formData.entries()]);
+        const response = await apiClient.post("/real-estates", formData);
+        this.clearForm();
+        console.log(response.data);
+      } catch (error) {
+        console.error(
+          "Validation Error:",
+          error.response ? error.response.data : error
+        );
+      }
     },
+    clearForm() {
+      this.formData = {
+        selectedDeal: "sell",
+        address: "",
+        area: "",
+        zip_code: "",
+        price: "",
+        bedrooms: "",
+        description: "",
+        selectedCity: "",
+        selectedRegion: "",
+        avatar: null,
+        selectedAgent: "",
+      };
+      this.previewImage = null;
+      this.isModalVisible = false;
+    },
+
     addagent() {
       this.isModalVisible = true;
-      console.log("add agent");
     },
     closeModal() {
       this.isModalVisible = false;
     },
-
     async getRegionlist() {
       try {
         const response = await httprequests.getRegionlist();
         this.region = response.data;
       } catch (error) {
-        console.error("Error fetching regions:", error);
+        console.error("Error fetching getRegionlist:", error);
       }
     },
     async getAgentslist() {
       try {
         const response = await httprequests.getAgentslist();
         this.agents = response.data;
-        console.log("Agents:", this.agents);
+        console.log("👨‍💼 Agents:", this.agents);
       } catch (error) {
-        console.error("Error fetching agents:", error);
+        console.error("Error fetching getAgentslist:", error);
       }
     },
     async getCitylist() {
@@ -317,7 +375,7 @@ export default {
         const response = await httprequests.getCitylist();
         this.cities = response.data;
       } catch (error) {
-        console.error("Error fetching regions:", error);
+        console.error("Error fetching getCitylist:", error);
       }
     },
   },

@@ -14,7 +14,6 @@ export default {
     async fetchData() {
       try {
         const response = await apiClient.get("/agents");
-        console.log(response.data);
         this.agents = response.data;
       } catch (error) {
         console.error("Error fetching agents:", error);

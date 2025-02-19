@@ -18,10 +18,7 @@ apiClient.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`; 
   }
   config.headers['Accept'] = 'application/json';
-  config.headers['Content-Type'] = 'application/json';
-
-
-  return config;
+    return config;
 });
 
 export default apiClient;
