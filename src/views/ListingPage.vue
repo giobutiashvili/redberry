@@ -6,7 +6,6 @@
       </router-link>
     </div>
     <div class="row d-flex align-items-center">
-      <!-- Image on the left -->
       <div class="col-md-6">
         <img
           :src="realestate.image"
@@ -16,7 +15,6 @@
         />
       </div>
 
-      <!-- Content on the right -->
       <div class="col-md-6">
         <div class="card-body">
           <h5 class="card-title">{{ realestate.price }} ₾</h5>
@@ -126,129 +124,132 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="mt-5">
       <h2>ბინები მსგავს ლოკაციაზე</h2>
+
+      <div v-if="filterLocation.length > 0" class="row mt-4">
+        <Swiper
+          :slides-per-view="3"
+          :space-between="20"
+          :loop="true"
+          :autoplay="{ delay: 3000 }"
+          :navigation="true"
+          :pagination="{ clickable: true }"
+          class="swiper-container"
+        >
+          <SwiperSlide
+            class="col-md-4 d-flex mb-3"
+            v-for="realestate in filterLocation"
+            :key="realestate.id"
+          >
+            <router-link
+              :to="{ name: 'listing', params: { id: realestate.id } }"
+            >
+              <div
+                class="card mx-auto card-info"
+                style="
+                  width: 18rem;
+                  border-top-right-radius: 14px;
+                  border-top-left-radius: 14px;
+                "
+              >
+                <img class="card-img-top" :src="realestate.image" />
+                <div class="card-body">
+                  <h5 class="card-title" style="font-size: 24px">
+                    {{ realestate.price }} ₾
+                  </h5>
+                  <p class="card-text">
+                    <font-awesome-icon :icon="['fas', 'location-dot']" />
+                    {{ realestate.address }}
+                  </p>
+                  <div class="d-flex justify-content-between mt-3">
+                    <p class="card-text">
+                      <font-awesome-icon :icon="['fas', 'bed']" />
+                      {{ realestate.bedrooms }}
+                    </p>
+                    <p class="card-text">
+                      <font-awesome-icon :icon="['fas', 'vector-square']" />
+                      {{ realestate.area }} m²
+                    </p>
+                    <p class="card-text">
+                      <font-awesome-icon :icon="['fas', 'signs-post']" />
+                      {{ realestate.zip_code }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </router-link>
+          </SwiperSlide>
+        </Swiper>
+      </div>
+      <div v-else class="d-flex justify-content-center mt-5">
+        <h4>ბინები ამ ლოკაციაზე არ მოიძებნა</h4>
+      </div>
     </div>
-    <!-- <div class="fluid d-flex mt-4">
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div
-          class="card mx-auto card-info"
-          style="
-            width: 18rem;
-            border-top-right-radius: 14px;
-            border-top-left-radius: 14px;
-          "
-        >
-          <img class="card-img-top" src="../assets/image/image1.png" />
-          <div class="card-body">
-            <h5 class="card-title" style="font-size: 24px">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div
-          class="card mx-auto card-info"
-          style="
-            width: 18rem;
-            border-top-right-radius: 14px;
-            border-top-left-radius: 14px;
-          "
-        >
-          <img class="card-img-top" src="../assets/image/image1.png" />
-          <div class="card-body">
-            <h5 class="card-title" style="font-size: 24px">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-12 col-md-4 d-flex justify-content-center mb-3">
-        <div
-          class="card mx-auto card-info"
-          style="
-            width: 18rem;
-            border-top-right-radius: 14px;
-            border-top-left-radius: 14px;
-          "
-        >
-          <img class="card-img-top" src="../assets/image/image5.png" />
-          <div class="card-body">
-            <h5 class="card-title" style="font-size: 24px">80 000 ₾</h5>
-            <p class="card-text">
-              <font-awesome-icon :icon="['fas', 'location-dot']" /> თბილისი, ი.
-              ჭავჭავაძის 53
-            </p>
-            <div class="d-flex justify-content-between mt-3">
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'bed']" /> 2
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'vector-square']" /> 100 m²
-              </p>
-              <p class="card-text">
-                <font-awesome-icon :icon="['fas', 'signs-post']" /> 3700
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
 <script>
 import httprequest from "@/httprequest/HttpRequest";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 export default {
   name: "ListingPage",
+  components: {
+    Swiper,
+    SwiperSlide,
+  },
+  setup() {
+    return {
+      modules: [Autoplay, Navigation, Pagination],
+    };
+  },
 
   data() {
     return {
       realestate: { agent: {} },
       isVisible: false,
+      realestates: [],
     };
   },
   mounted() {
     this.getRealEstate();
+    this.getRealEstates();
+  },
+  computed: {
+    filterLocation() {
+      return this.realestates.filter(
+        (realestate) =>
+          realestate.address === this.realestate.address &&
+          realestate.id !== this.realestate.id
+      );
+    },
+  },
+  watch: {
+    "$route.params.id": "getRealEstate",
   },
   methods: {
     async getRealEstate() {
       try {
         const response = await httprequest.getRealEstate(this.$route.params.id);
         this.realestate = response.data;
-        console.log("Real Estate data:", this.realestate);
       } catch (error) {
         console.error("Error fetching real estate data:", error);
       }
     },
+    async getRealEstates() {
+      try {
+        const response = await httprequest.getRealEstates();
+        this.realestates = response.data;
+      } catch (error) {
+        console.error("Error fetching real estate data:", error);
+      }
+    },
+
     async deletListing(id) {
       try {
         await httprequest.deleterealestate(id);
@@ -312,7 +313,7 @@ export default {
 .card-title {
   font-weight: 700;
   font-size: 48px;
-  line-height: 57.6px; /* სწორად ფორმატირებული */
+  line-height: 57.6px;
 }
 
 .description {
