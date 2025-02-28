@@ -1,17 +1,17 @@
 <template>
   <main class="container my-4">
-    <div class="d-flex justify-content-between">
+    <div class="d-flex justify-content-between mb-3">
       <ul class="d-flex me-auto mb-2 mb-lg-0">
-        <li class="mx-2">
+        <li class="mx-2" @click="getFilter('region')">
           რეგიონი <font-awesome-icon :icon="['fas', 'angle-down']" />
         </li>
-        <li class="mx-2">
+        <li class="mx-2" @click="getFilter('price')">
           საფასო კატეგორია <font-awesome-icon :icon="['fas', 'angle-down']" />
         </li>
-        <li class="mx-2">
+        <li class="mx-2" @click="getFilter('area')">
           ფართობი <font-awesome-icon :icon="['fas', 'angle-down']" />
         </li>
-        <li class="mx-2">
+        <li class="mx-2" @click="getFilter('bedrooms')">
           საძინებლის რაოდენობა
           <font-awesome-icon :icon="['fas', 'angle-down']" />
         </li>
@@ -24,6 +24,96 @@
           + აგენტის დამატება
         </button>
         <AgentModal v-if="isModalVisible" @close="isModalVisible = false" />
+      </div>
+    </div>
+    <div v-if="filterVizual === 'region'">
+      <div class="row">
+        <div
+          class="col-md-7 padding-0"
+          style="border: 1px solid #dbdbdb; border-radius: 10px"
+        >
+          <div>
+            <p
+              class="m-3"
+              style="font-weight: 500; font-size: 16px; line-height: 19.2px"
+            >
+              რეგიონების მიხედვით
+            </p>
+          </div>
+          <div class="d-flex flex-wrap m-3 justify-content-start">
+            <div
+              v-for="region in regions"
+              :key="region.id"
+              class="d-flex align-items-center"
+            >
+              <input
+                class="p-2 mr-1"
+                type="checkbox"
+                :id="'region-' + region.id"
+                :value="region.id"
+                v-model="selectedRegions"
+              />
+              <label :for="'region-' + region.id" class="mr-4">{{
+                region.name
+              }}</label>
+            </div>
+          </div>
+          <div class="mr-3 d-flex justify-content-end">
+            <button
+              type="submit"
+              @click="changeRegions"
+              class="addlisting mb-3"
+              style="width: 77px; height: 33px; padding: 8px, 14px"
+            >
+              არჩევა
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-if="filterVizual === 'area'">
+      <div class="row">
+        <div
+          class="col-md-7 padding-0"
+          style="border: 1px solid #dbdbdb; border-radius: 10px"
+        >
+          <div>
+            <p
+              class="m-3"
+              style="font-weight: 500; font-size: 16px; line-height: 19.2px"
+            >
+              ფართობის მიხედვით
+            </p>
+          </div>
+          <div class="d-flex flex-wrap m-3 justify-content-start">
+            <div
+              v-for="region in regions"
+              :key="region.id"
+              class="d-flex align-items-center"
+            >
+              <input
+                class="p-2 mr-1"
+                type="checkbox"
+                :id="'region-' + region.id"
+                :value="region.id"
+                v-model="selectedRegions"
+              />
+              <label :for="'region-' + region.id" class="mr-4">{{
+                region.name
+              }}</label>
+            </div>
+          </div>
+          <div class="mr-3 d-flex justify-content-end">
+            <button
+              type="submit"
+              @click="changeRegions"
+              class="addlisting mb-3"
+              style="width: 77px; height: 33px; padding: 8px, 14px"
+            >
+              არჩევა
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -89,13 +179,27 @@ export default {
   data() {
     return {
       realestates: [],
+      regions: [],
       isModalVisible: false,
+      filterVizual: false,
+      selectedRegions: [],
     };
   },
+
   mounted() {
     this.getRealEstates();
+    this.getRegions();
   },
   methods: {
+    async getRegions() {
+      try {
+        const response = await httprequests.getRegionlist();
+        this.regions = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async getRealEstates() {
       try {
         const response = await httprequests.getRealEstates();
@@ -104,9 +208,14 @@ export default {
         console.log(error);
       }
     },
-
+    getFilter(filter) {
+      this.filterVizual = this.filterVizual === filter ? false : filter;
+    },
     goToAddListing() {
       this.$router.push("/addlisting");
+    },
+    changeRegions() {
+      console.log(this.selectedRegions);
     },
   },
 };

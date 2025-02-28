@@ -106,7 +106,7 @@
               გაუქმება
             </button>
             <button type="button" @click="submitForm" class="btn addlisting">
-              დაამატე ფოტო
+              დაამატე აგენტი
             </button>
           </div>
         </form>
